@@ -15,11 +15,11 @@ class CreateAnswersTable extends Migration
     {
         Schema::create('answers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigIncrements('survey_id');
+            $table->unsignedBigInteger('survey_id');
             $table->unsignedBigInteger('option_id')->nullable();
             $table->unsignedBigInteger('questions_id');
             $table->text('sugguestion')->nullable();
-            $table->integer('signed')->default(0)->comment('身份标志，0-教职工，1-学生');
+            $table->integer('sign')->default(0)->comment('身份标志，0-教职工，1-学生');
             $table->timestamps();
         });
     }
