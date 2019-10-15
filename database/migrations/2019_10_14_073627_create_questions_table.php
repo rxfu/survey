@@ -16,7 +16,8 @@ class CreateQuestionsTable extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->text('content');
-            $table->integer('type')->default(0);
+            $table->integer('type')->default(0)->omment('0-单选，1-多选');
+            $table->unsignedInteger('seq');
             $table->timestamps();
         });
     }

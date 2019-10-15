@@ -14,7 +14,9 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        //
+        $questions = Question::orderBy('id')->get();
+
+        return view('survey', compact('questions'));
     }
 
     /**

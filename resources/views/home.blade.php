@@ -14,7 +14,24 @@
                         </div>
                     @endif
 
-                    你已经登录成功过
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">题目</th>
+                                <th scope="col">选项</th>
+                                <th scope="col">教职工</th>
+                                <th scope="col">学生</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($answers as $answer)
+                                <th scope="row">{{ $answer->question->id }}</th>
+                                <td>{{ $answer->question->content }}</td>
+                                <td>{{ $answer->option->content }}</td>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
