@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use App\Answer;
+use App\Question;
 use Illuminate\Http\Request;
 
 class AnswerController extends Controller
@@ -35,7 +37,53 @@ class AnswerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->isMethod('post')) {
+            foreach (range(0, 11) as $value) {
+                $rules['q' . $value] = 'required';
+            }
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return back()->withInput()->withErrors($validator);
+            }
+
+            $surveyId = Answer::max('survey_id') + 1;
+            $questions = Question::orderBy('id')->get();
+
+            foreach ($questions as $question) {
+                $input = $request->input('q' . $question->id);
+
+                if (is_array($input)) {
+                    foreach ($input as $value) {
+                        $answer = new Answer;
+                        $answer->survey_id = $surveyId;
+                        $answer->question_id = $question->id;
+                        $answer->option_id = $value;
+                        $answer->sign = $request->input('q0');
+                        $answer->save();
+                    }
+                } else {
+                    if ($question->options->count()) {
+                        $answer = new Answer;
+                        $answer->survey_id = $surveyId;
+                        $answer->question_id = $question->id;
+                        $answer->option_id = $input;
+                        $answer->sign = $request->input('q0');
+                        $answer->save();
+                    } else {
+                        $answer = new Answer;
+                        $answer->survey_id = $surveyId;
+                        $answer->question_id = $question->id;
+                        $answer->sugguestion = $input;
+                        $answer->sign = $request->input('q0');
+                        $answer->save();
+                    }
+                }
+            }
+
+            return redirect()->route('question.index')->withStatus('调查问卷提交成功');
+        }
+
+        return redirect()->route('question.index')->withError('调查问卷提交失败');
     }
 
     /**

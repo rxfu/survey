@@ -11,6 +11,16 @@
                             {{ session('status') }}
                         </div>
                     @endif
+                    @if (session('error'))
+                        <div class="alert alert-danger" role="alert">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                    @if ($errors->all())
+                        <div class="alert alert-danger" role="alert">
+                            所有调查问题必须填写
+                        </div>
+                    @endif
                     
                     <h3 class="card-title text-center">关于档案馆档案服务利用的问卷调查</h3>
 
@@ -18,7 +28,9 @@
                         <p>您好！感谢您在百忙当中参与这项调查工作。为了更好的做好档案管理工作，提升业务水平，希望能听取您的宝贵意见，请您如实填写。此问卷匿名，我们会对您的回答完全保密。祝您工作顺利，谢谢！</p>
                     </blockquote>
 
-                    <form method="post" action="{{ route('answer.create') }}">
+                    <form method="post" action="{{ route('answer.store') }}">
+                        @csrf
+
                         <p class="card-text">
                             <div class="list-group">
                                 @foreach ($questions as $question)
@@ -50,10 +62,10 @@
                                         </h5>
                                         @if ($question->type == 1)
                                             <ol style="list-style-type: upper-alpha">
-                                                @foreach ($question->options as $option)
+                                                @foreach ($question->options as $key => $option)
                                                     <li>
                                                         <div class="custom-control custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" value="{{ $option->id }}" name="q{{ $question->id }}" id="q{{ $question->id }}{{ $option->id }}">
+                                                            <input type="checkbox" class="custom-control-input" value="{{ $option->id }}" name="q{{ $question->id }}[{{ $key }}]" id="q{{ $question->id }}{{ $option->id }}"{{ old('q' . $question->id . '.' . $key) == $option->id ? ' checked' : ''}}>
                                                             <label class="custom-control-label" for="q{{ $question->id }}{{ $option->id }}">{{ $option->content }}</label>
                                                         </div>
                                                     </li>
@@ -65,7 +77,7 @@
                                                     @foreach ($question->options as $option)
                                                         <li>
                                                             <div class="custom-control custom-radio">
-                                                                <input type="radio" class="custom-control-input" value="{{ $option->id }}" name="q{{ $question->id }}" id="q{{ $question->id }}{{ $option->id }}">
+                                                                <input type="radio" class="custom-control-input" value="{{ $option->id }}" name="q{{ $question->id }}" id="q{{ $question->id }}{{ $option->id }}"{{ old('q' . $question->id) == $option->id ? ' checked' : ''}}>
                                                                 <label class="custom-control-label" for="q{{ $question->id }}{{ $option->id }}">{{ $option->content }}</label>
                                                             </div>
                                                         </li>
@@ -73,7 +85,7 @@
                                                 </ol>
                                             @else
                                                 <div class="form-group">
-                                                    <textarea name="q{{ $question->id }}" id="q{{ $question->id }}" rows="10" class="form-control"></textarea>
+                                                    <textarea name="q{{ $question->id }}" id="q{{ $question->id }}" rows="10" class="form-control">{{ old('q' . $question->id) }}</textarea>
                                                 </div>
                                             @endif
                                         @endif

@@ -17,7 +17,7 @@ class CreateAnswersTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('survey_id');
             $table->unsignedBigInteger('option_id')->nullable();
-            $table->unsignedBigInteger('questions_id');
+            $table->unsignedBigInteger('question_id');
             $table->text('sugguestion')->nullable();
             $table->integer('sign')->default(0)->comment('身份标志，0-教职工，1-学生');
             $table->timestamps();
