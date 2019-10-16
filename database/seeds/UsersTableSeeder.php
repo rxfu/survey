@@ -15,6 +15,7 @@ class UsersTableSeeder extends Seeder
         User::create([
             'username' => 'admin',
             'password' => 'admin888',
+            'name' => '超级管理员',
         ]);
     }
 }
