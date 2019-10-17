@@ -37,9 +37,9 @@
                                     <td>{{ $item['qtitle'] }}</td>
                                     <td>{{ $item['otitle'] }}</td>
                                     <td>{{ $item['ttotal'] }}</td>
-                                    <td>{{ number_format($item['tpercent'] * 100) }}%</td>
+                                    <td>{{ number_format($item['tpercent'] * 100, 2) }}%</td>
                                     <td>{{ $item['stotal'] }}</td>
-                                    <td>{{ number_format($item['spercent'] * 100) }}%</td>
+                                    <td>{{ number_format($item['spercent'] * 100, 2) }}%</td>
                                 </tr>
                             @endforeach
                         </tbody>
